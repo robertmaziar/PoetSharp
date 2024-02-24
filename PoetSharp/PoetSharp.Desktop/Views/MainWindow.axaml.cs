@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
@@ -20,7 +19,6 @@ namespace PoetSharp.Desktop.Views
 
         public void ClickHandler(object sender, RoutedEventArgs args)
         {
-            // TODO: Process the list
             ViewModel.LoadSentenceView();
         }
     }

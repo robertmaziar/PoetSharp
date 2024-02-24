@@ -12,6 +12,6 @@ namespace PoetSharp.Desktop.ViewModels
             _sentence = sentence;
         }
 
-        public List<WordWithSyllableCount> WordGroup => _sentence.WordGroup;
+        public List<Word> Words => _sentence.Words;
     }
 }

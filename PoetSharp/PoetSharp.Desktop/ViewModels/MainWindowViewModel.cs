@@ -1,25 +1,18 @@
 ﻿using PoetSharp.Desktop.Models;
 using ReactiveUI;
-using System;
 using System.Collections.ObjectModel;
-using System.Reactive.Linq;
 
 namespace PoetSharp.Desktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private SyllableHighlighter syllableHighlighter;
+        private SentenceValidator sentenceValidator;
 
         public MainWindowViewModel()
         {
-            syllableHighlighter = new SyllableHighlighter();
-            Sentences = new ObservableCollection<Sentence>();
-   
-            //this.WhenAnyValue(x => x.HighlightedWords)
-            //   .Where(x => x.Count > 0)
-            //   .Throttle(TimeSpan.FromMilliseconds(400))
-            //   .ObserveOn(RxApp.MainThreadScheduler)
-            //   .Subscribe(LoadWordsView!);    
+            inputText = "";
+            sentenceValidator = new SentenceValidator();
+            validatedSentences = new ObservableCollection<Sentence>();
         }
 
         private string inputText;
@@ -29,22 +22,15 @@ namespace PoetSharp.Desktop.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref inputText, value);
-                Sentences = syllableHighlighter.HighlightStressedSyllables(inputText);
+                ValidatedSentences = sentenceValidator.GetValidatedInput(inputText);
             }
         }
 
-        //private ObservableCollection<WordWithSyllableCount> highlightedWords;
-        //public ObservableCollection<WordWithSyllableCount> HighlightedWords
-        //{
-        //    get => highlightedWords;
-        //    set => this.RaiseAndSetIfChanged(ref highlightedWords, value);
-        //}
-
-        private ObservableCollection<Sentence> sentences;
-        public ObservableCollection<Sentence> Sentences
+        private ObservableCollection<Sentence> validatedSentences;
+        public ObservableCollection<Sentence> ValidatedSentences
         {
-            get => sentences;
-            set => this.RaiseAndSetIfChanged(ref sentences, value);
+            get => validatedSentences;
+            set => this.RaiseAndSetIfChanged(ref validatedSentences, value);
         }
 
         public ObservableCollection<SentenceViewModel> SentenceViewModels { get; } = new();
@@ -53,9 +39,9 @@ namespace PoetSharp.Desktop.ViewModels
         {
             SentenceViewModels.Clear();
 
-            foreach (var sentence in Sentences)
+            foreach (Sentence sentence in ValidatedSentences)
             {
-                var vm = new SentenceViewModel(sentence);
+                SentenceViewModel vm = new SentenceViewModel(sentence);
 
                 SentenceViewModels.Add(vm);
             }
