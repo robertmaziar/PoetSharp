@@ -1,23 +1,52 @@
-<Window xmlns="https://github.com/avaloniaui"	
-        xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:PoetSharp.Desktop.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PoetSharp.Desktop.Views.MainWindow"
+		
+			 xmlns:views="clr-namespace:PoetSharp.Desktop.Views"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="PoetSharp.Desktop">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+	<StackPanel>
+		<TextBox Text="{Binding InputText, Mode=TwoWay}" AcceptsReturn="True" Margin="5"/>
+		<Button Content="Process Text" Click="ClickHandler" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+		<StackPanel>
+			<ItemsControl ItemsSource="{Binding SentenceViewModels}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<ListBox ItemsSource="{Binding WordGroup}" Margin="0 20">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock>
+										<Run Text="{Binding Word}" Foreground="Red" />
+										<Run Text="{Binding SyllableCount}" FontSize="10" Foreground="Green" />
+									</TextBlock>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 
-    <!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
-	<AvaloniaEdit:TextEditor Text="Hello AvaloniaEdit!"
-							 ShowLineNumbers="True"
-							 FontFamily="Cascadia Code,Consolas,Menlo,Monospace"/>
+			<!--<ListBox ItemsSource="{Binding SentenceViewModels}" Margin="0 20">
+				<ListBox.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel />
+					</ItemsPanelTemplate>
+				</ListBox.ItemsPanel>
+			</ListBox>-->
+		</StackPanel>
+	</StackPanel>
 </Window>

@@ -9,8 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\words_with_stress.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\cmudict.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\words_with_stress.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 
@@ -23,5 +35,12 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Views\SentenceView.axaml.cs">
+      <DependentUpon>SentenceView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
