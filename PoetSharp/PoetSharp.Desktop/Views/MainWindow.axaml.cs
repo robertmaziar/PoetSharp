@@ -7,6 +7,7 @@ namespace PoetSharp.Desktop.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -19,7 +20,7 @@ namespace PoetSharp.Desktop.Views
 
         public void ClickHandler(object sender, RoutedEventArgs args)
         {
-            ViewModel.LoadSentenceView();
+            ViewModel!.LoadSentenceView();
         }
     }
 }

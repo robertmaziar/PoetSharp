@@ -1,24 +1,30 @@
-﻿using System;
+﻿using PoetSharp.Desktop.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace PoetSharp.Desktop.Models
+namespace PoetSharp.Desktop.Services
 {
-    public class SentenceValidator
+    public class SentenceService
     {
-        private Dictionary<string, string> wordStressDictionary;
+        private Dictionary<string, string> data;
 
-        public SentenceValidator()
+        public SentenceService()
         {
-            wordStressDictionary = new Dictionary<string, string>();
-
-            LoadHardCodedDictionary();
+            Init();
         }
 
-        private void LoadHardCodedDictionary()
+        private void Init()
+        {
+            data = new Dictionary<string, string>();
+
+            LoadFromFile();
+        }
+
+        private void LoadFromFile()
         {
             string dictionaryFilePath = Path.Combine("C://Users//rober//Desktop", "words_with_stress.txt"); // Update with the path to your CMU Pronouncing Dictionary file
             //string dictionaryFilePath = Path.Combine("Resources", "words_with_stress.txt"); // Update with the path to your CMU Pronouncing Dictionary file
@@ -30,8 +36,14 @@ namespace PoetSharp.Desktop.Models
                 string word = parts[0];
                 string pronunciation = parts[1].Replace('-', '·');
                 int syllableCount = pronunciation.Count(c => c == '·') + 1;
-                wordStressDictionary[word.ToLower()] = pronunciation;
+                data[word.ToLower()] = pronunciation;
             }
+        }
+
+        private void LoadFromDb()
+        {
+            // TODO: May need to implement SQL Lite
+            throw new NotImplementedException();
         }
 
         public ObservableCollection<Sentence> GetValidatedInput(string input)
@@ -50,7 +62,7 @@ namespace PoetSharp.Desktop.Models
                 foreach (string word in words.Where(o => !string.IsNullOrWhiteSpace(o)))
                 {
                     // Check if the word is in the CMU Pronouncing Dictionary
-                    if (wordStressDictionary.TryGetValue(word.ToLower(), out string pronunciation))
+                    if (data.TryGetValue(word.ToLower(), out string pronunciation))
                     {
                         string stressedWord = pronunciation;
                         int syllableCount = pronunciation.Count(c => c == '·') + 1;
@@ -68,6 +80,5 @@ namespace PoetSharp.Desktop.Models
 
             return sentences;
         }
-
     }
 }

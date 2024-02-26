@@ -1,5 +1,6 @@
 ﻿using PoetSharp.Desktop.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PoetSharp.Desktop.ViewModels
 {
@@ -12,6 +13,6 @@ namespace PoetSharp.Desktop.ViewModels
             _sentence = sentence;
         }
 
-        public List<Word> Words => _sentence.Words;
+        public List<WordViewModel> Words => _sentence.Words.Select(o => new WordViewModel(o)).ToList();
     }
 }

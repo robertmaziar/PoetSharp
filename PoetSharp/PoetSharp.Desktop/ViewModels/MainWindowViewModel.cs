@@ -1,4 +1,5 @@
 ﻿using PoetSharp.Desktop.Models;
+using PoetSharp.Desktop.Services;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 
@@ -6,12 +7,13 @@ namespace PoetSharp.Desktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private SentenceValidator sentenceValidator;
+        private readonly SentenceService _sentenceService;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(SentenceService sentenceService)
         {
+            _sentenceService = sentenceService;
+
             inputText = "";
-            sentenceValidator = new SentenceValidator();
             validatedSentences = new ObservableCollection<Sentence>();
         }
 
@@ -22,7 +24,7 @@ namespace PoetSharp.Desktop.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref inputText, value);
-                ValidatedSentences = sentenceValidator.GetValidatedInput(inputText);
+                ValidatedSentences = _sentenceService.GetValidatedInput(inputText);
             }
         }
 
@@ -33,17 +35,17 @@ namespace PoetSharp.Desktop.ViewModels
             set => this.RaiseAndSetIfChanged(ref validatedSentences, value);
         }
 
-        public ObservableCollection<SentenceViewModel> SentenceViewModels { get; } = new();
+        public ObservableCollection<SentenceViewModel> Sentences { get; } = new();
 
         public void LoadSentenceView()
         {
-            SentenceViewModels.Clear();
+            Sentences.Clear();
 
             foreach (Sentence sentence in ValidatedSentences)
             {
                 SentenceViewModel vm = new SentenceViewModel(sentence);
 
-                SentenceViewModels.Add(vm);
+                Sentences.Add(vm);
             }
         }
     }
