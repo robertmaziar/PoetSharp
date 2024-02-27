@@ -1,4 +1,5 @@
 ﻿using PoetSharp.Desktop.Models;
+using PoetSharp.Desktop.Services;
 using ReactiveUI;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -7,27 +8,33 @@ namespace PoetSharp.Desktop.ViewModels
 {
     public class WordViewModel : ViewModelBase
     {
-        public ICommand OpenDictionaryCommand { get; }
-        public Interaction<DictionaryViewModel, WordViewModel> ShowDialog { get; }
+
+        private readonly ISentenceService _sentenceService;
+
+        public ICommand OpenWordBookCommand { get; }
+        public Interaction<WordBookViewModel, WordBookDefinitionViewModel> ShowDialog { get; }
 
         private readonly Word _word;
 
-        public WordViewModel(Word word)
+        public WordViewModel(Word word, ISentenceService sentenceService)
         {
+            _sentenceService = sentenceService;
+
             _word = word;
 
-            ShowDialog = new Interaction<DictionaryViewModel, WordViewModel>();
-            OpenDictionaryCommand = ReactiveCommand.CreateFromTask(async () =>
+            ShowDialog = new Interaction<WordBookViewModel, WordBookDefinitionViewModel>();
+            OpenWordBookCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var dictionary = new DictionaryViewModel();
+                var wordBook = new WordBookViewModel(_sentenceService);
 
-                var result = await ShowDialog.Handle(dictionary);
+                var result = await ShowDialog.Handle(wordBook);
 
                 //if (result != null)
                 //{
                 //    Albums.Add(result);
                 //}
             });
+            _sentenceService = sentenceService;
         }
 
         public string Text => _word.Text;

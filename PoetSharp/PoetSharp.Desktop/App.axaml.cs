@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using PoetSharp.Desktop.Services;
 using PoetSharp.Desktop.ViewModels;
 using PoetSharp.Desktop.Views;
+using Splat;
 
 namespace PoetSharp.Desktop
 {
@@ -16,6 +17,8 @@ namespace PoetSharp.Desktop
 
         public override void Initialize()
         {
+            Locator.CurrentMutable.RegisterConstant(() => new SentenceService(), typeof(ISentenceService));
+
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -23,11 +26,12 @@ namespace PoetSharp.Desktop
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                SentenceService sentenceService = new SentenceService();
+                var sentenceService = new SentenceService();
+                MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(sentenceService);
 
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(sentenceService),
+                    DataContext = mainWindowViewModel,
                 };
 
                 // Here is where a reference to the main window is saved to the App class

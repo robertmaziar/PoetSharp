@@ -7,9 +7,15 @@ namespace PoetSharp.Desktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly SentenceService _sentenceService;
+        private readonly ISentenceService _sentenceService;
 
-        public MainWindowViewModel(SentenceService sentenceService)
+        public MainWindowViewModel()
+        {
+            inputText = "";
+            validatedSentences = new ObservableCollection<Sentence>();
+        }
+
+        public MainWindowViewModel(ISentenceService sentenceService)
         {
             _sentenceService = sentenceService;
 
@@ -43,7 +49,7 @@ namespace PoetSharp.Desktop.ViewModels
 
             foreach (Sentence sentence in ValidatedSentences)
             {
-                SentenceViewModel vm = new SentenceViewModel(sentence);
+                SentenceViewModel vm = new SentenceViewModel(sentence, _sentenceService);
 
                 Sentences.Add(vm);
             }

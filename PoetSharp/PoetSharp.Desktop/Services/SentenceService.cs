@@ -8,18 +8,13 @@ using System.Text.RegularExpressions;
 
 namespace PoetSharp.Desktop.Services
 {
-    public class SentenceService
+    public class SentenceService : ISentenceService
     {
-        private Dictionary<string, string> data;
+        private readonly Dictionary<string, string> _data;
 
         public SentenceService()
         {
-            Init();
-        }
-
-        private void Init()
-        {
-            data = new Dictionary<string, string>();
+            _data = new Dictionary<string, string>();
 
             LoadFromFile();
         }
@@ -36,7 +31,7 @@ namespace PoetSharp.Desktop.Services
                 string word = parts[0];
                 string pronunciation = parts[1].Replace('-', '·');
                 int syllableCount = pronunciation.Count(c => c == '·') + 1;
-                data[word.ToLower()] = pronunciation;
+                _data[word.ToLower()] = pronunciation;
             }
         }
 
@@ -44,6 +39,11 @@ namespace PoetSharp.Desktop.Services
         {
             // TODO: May need to implement SQL Lite
             throw new NotImplementedException();
+        }
+
+        public Dictionary<string, string> GetData()
+        {
+            return _data;
         }
 
         public ObservableCollection<Sentence> GetValidatedInput(string input)
@@ -62,7 +62,7 @@ namespace PoetSharp.Desktop.Services
                 foreach (string word in words.Where(o => !string.IsNullOrWhiteSpace(o)))
                 {
                     // Check if the word is in the CMU Pronouncing Dictionary
-                    if (data.TryGetValue(word.ToLower(), out string pronunciation))
+                    if (_data.TryGetValue(word.ToLower(), out string pronunciation))
                     {
                         string stressedWord = pronunciation;
                         int syllableCount = pronunciation.Count(c => c == '·') + 1;

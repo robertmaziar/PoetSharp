@@ -9,7 +9,7 @@
 	<Design.DataContext>
 		<vm:WordViewModel/>
 	</Design.DataContext>
-	<Button Command="{Binding OpenDictionaryCommand}">
+	<Button Command="{Binding OpenWordBookCommand}">
 		<TextBlock>
 			<Run Text="{Binding Text}" />
 			<Run Text="{Binding SyllableCount}" FontSize="12" Foreground="Green" />

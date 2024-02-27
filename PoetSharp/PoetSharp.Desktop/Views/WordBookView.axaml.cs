@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace PoetSharp.Desktop.Views;
 
-public partial class DictionaryWindow : Window
+public partial class WordBookView : UserControl
 {
-    public DictionaryWindow()
+    public WordBookView()
     {
         InitializeComponent();
     }
